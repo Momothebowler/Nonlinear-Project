@@ -12,7 +12,7 @@ h2 = 2 * c * n * (n0 - 1)
 
 for p in range(50):
     np.random.seed(p)
-    np.set_printoptions(legacy="1.25")
+    # np.set_printoptions(legacy="1.25")
 
     indexes = []
     data = {}
