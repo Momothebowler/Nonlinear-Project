@@ -61,11 +61,13 @@ for p in range(50):
         # print(indexes)
 
         while len(indexes) != 1 or r <= n_max + 1:
+            means = []
             r += batch
             for i in range(k):
                 np.append(data[i], np.random.normal(presets[i][0], presets[i][1], 1)[0])
                 means.append(sum(data[i]) / r)
 
+            for i in range(k):
                 for l in range(k):
                     if l == i or i not in indexes:
                         continue
