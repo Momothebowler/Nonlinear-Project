@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import copy
 
 alpha = 0.05
 batch = 100
@@ -48,6 +49,7 @@ for p in range(50):
     # df = pd.DataFrame(n_cap)
     # print(n_max)
 
+    # print(means)
     if n0 < n_max:
         r = n0
         for i in range(k):
@@ -60,11 +62,15 @@ for p in range(50):
 
         # print(indexes)
 
-        while len(indexes) != 1 or r <= n_max + 1:
+        while len(indexes) > 1 or r + 1 <= n_max + 1:
+            if len(indexes) >= 1:
+                index_old = copy.deepcopy(indexes)
             means = []
             r += batch
             for i in range(k):
-                np.append(data[i], np.random.normal(presets[i][0], presets[i][1], 1)[0])
+                data[i] = np.append(
+                    data[i], np.random.normal(presets[i][0], presets[i][1], batch)
+                )
                 means.append(sum(data[i]) / r)
 
             for i in range(k):
@@ -74,17 +80,37 @@ for p in range(50):
                     w = max(0, delta / (2 * c * r) * (h2 * s2[i][l] / delta**2 - r))
                     if means[i] < means[l] - w:
                         indexes.remove(i)
-        # print(indexes)
-        # for i in presets:
-        # print(presets[4])
-        print(
-            "Max mean is: {} and it is system/s: {} with mean/std: {} and took r rounds: {}".format(
-                round(max(means), 2),
-                indexes[0],
-                (round(presets[indexes[0]][0], 2), round(presets[indexes[0]][1], 2)),
-                r,
+
+        if indexes:
+            try_max = 0
+            try_max_index = -1
+            for i in indexes:
+                if try_max < means[i]:
+                    try_max = max(try_max, means[i])
+                    try_max_index = i
+            print(
+                "Max mean is: {} and it is system/s: {} with mean/std: {} and took r rounds: {}".format(
+                    round(try_max, 2),
+                    try_max_index,
+                    (
+                        round(presets[try_max_index][0], 2),
+                        round(presets[try_max_index][1], 2),
+                    ),
+                    r,
+                )
             )
-        )
+        else:
+            print(
+                "Max mean is: {} and it is system/s: {} with mean/std: {} and took r rounds: {}".format(
+                    round(max(means), 2),
+                    np.argmax(means),
+                    (
+                        round(presets[np.argmax(means)][0], 2),
+                        round(presets[np.argmax(means)][1], 2),
+                    ),
+                    r,
+                )
+            )
 
     else:
         print(
