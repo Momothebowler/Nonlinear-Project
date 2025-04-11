@@ -55,8 +55,6 @@ for p in range(50):
                 if means[i] < means[l] - w:
                     indexes.remove(i)
 
-        # print(indexes)
-
         while len(indexes) > 1 or r + 1 <= n_max + 1:
             if len(indexes) >= 1:
                 index_old = copy.deepcopy(indexes)
