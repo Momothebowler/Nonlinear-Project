@@ -3,7 +3,7 @@ import pandas as pd
 from collections import Counter
 import copy
 
-alpha = 0.25
+alpha = 0.01
 # batch = 1
 delta = 0.05
 n0 = 24
@@ -12,7 +12,7 @@ c = 1
 n = 1 / 2 * (((2 * alpha) / (k - 1)) ** (-2 / (n0 - 1)) - 1)
 h2 = 2 * c * n * (n0 - 1)
 
-data_to_generate = 10000  # set to 1 for more optimal, high less optimal but faster
+data_to_generate = 1000  # set to 1 for more optimal, high less optimal but faster
 # changes r += number
 
 test = set()
@@ -25,7 +25,7 @@ presets = {}
 FINAL = []
 for i in range(k):
     indexes.append(i)
-    presets[i] = (np.random.uniform(1, 6), np.random.uniform(4, 5))
+    presets[i] = (np.random.uniform(1, 15), np.random.uniform(4, 5))
 
 actual_means, actual_variances = zip(*list(presets.values()))
 true_max_index = actual_means.index(max(actual_means))
@@ -50,7 +50,7 @@ for p in range(10):
         indexes.append(i)
         s2[i] = []
         n_cap[i] = []
-        data[i] = np.random.normal(presets[i][0], presets[i][1], n0)
+        data[i] = np.random.exponential(presets[i][0], n0)
         means.append(sum(data[i]) / n0)
 
     for l in range(k):
@@ -85,7 +85,7 @@ for p in range(10):
             for i in range(k):
                 data[i] = np.append(
                     data[i],
-                    np.random.normal(presets[i][0], presets[i][1], data_to_generate),
+                    np.random.exponential(presets[i][0], data_to_generate),
                 )
                 means.append(sum(data[i]) / r)
 
