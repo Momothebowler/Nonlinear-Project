@@ -3,16 +3,16 @@ import pandas as pd
 from collections import Counter
 import copy
 
-alpha = 0.01
+alpha = 0.05
 # batch = 1
-delta = 0.05
+delta = 0.1
 n0 = 24
-k = 100
+k = 1000
 c = 1
 n = 1 / 2 * (((2 * alpha) / (k - 1)) ** (-2 / (n0 - 1)) - 1)
 h2 = 2 * c * n * (n0 - 1)
 
-data_to_generate = 1000  # set to 1 for more optimal, high less optimal but faster
+data_to_generate = 100000  # set to 1 for more optimal, high less optimal but faster
 # changes r += number
 
 test = set()
@@ -25,7 +25,7 @@ presets = {}
 FINAL = []
 for i in range(k):
     indexes.append(i)
-    presets[i] = (np.random.uniform(1, 15), np.random.uniform(4, 5))
+    presets[i] = (np.random.uniform(1, 5), 0)
 
 actual_means, actual_variances = zip(*list(presets.values()))
 true_max_index = actual_means.index(max(actual_means))
